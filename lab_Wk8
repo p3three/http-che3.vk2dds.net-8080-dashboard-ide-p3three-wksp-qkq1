@@ -1,0 +1,337 @@
+lab_Wk8
+
+<input.txt>
+0.12, 0.1354, 0.3546, 0.64, 0.6
+0.12, 0.1354, 0.3546, 0.64, 0.6
+0.12, 0.1354, 0.3546, 0.64, 0.6
+0.12, 0.1354, 0.3546, 0.64, 0.6
+0.12, 0.1354, 0.3546, 0.64, 0.7
+
+<output.txt>
+0.120000 0.135400 0.354600 0.640000 0.600000
+0.120000 0.135400 0.354600 0.640000 0.600000
+0.120000 0.135400 0.354600 0.640000 0.600000
+0.120000 0.135400 0.354600 0.640000 0.600000
+0.120000 0.135400 0.354600 0.640000 0.700000
+0.700000
+
+<test.txt>
+abcdefghijklmnopqrstuvwxyz
+
+<main.c>
+
+#include <stdio.h>
+
+//File I/O Example//
+char program_one(void);
+
+//File I/O Example 1//
+char program_two(void);
+
+//File I/O Example 2//
+char program_three(void);
+
+//File I/O Example 3//
+char program_four(void);
+int isThe(char *string);
+
+//Example (pointers)
+char program_five(void);
+unsigned int zeroLarger(unsigned int *a, unsigned int *b);
+
+//Better Example (pointers)
+char program_six(void);
+void swap(int *a, int *b);
+
+//Command Line Arguments Example
+char program_seven(FILE *input);
+
+//2D Array Example
+char program_eight(void);
+
+
+///////////////////////////////////
+int main (int argc, char *argv[]) {
+    
+    FILE *input;
+    //input = fopen("argv[0]","r");
+    input = fopen("input.txt","r");
+    if (input == NULL) {
+        perror("fopen()");
+        return -1;
+    }
+    
+    //select program here
+    char program = 8;
+    
+    
+    switch (program) {
+        case 1:
+            program_one();
+            break;
+        case 2:
+            program_two();
+            break;
+        case 3:
+            program_three();
+            break;
+        case 4:
+            program_four();
+            break;
+        case 5:
+            program_five();
+            break;
+        case 6:
+            program_six();
+            break;
+        case 7:
+            program_seven(input);
+            break;
+        case 8:
+            program_eight();
+            break;
+        default:
+            printf("PROGRAM NUMBER INVALID\n");
+    }
+    
+    return 0;
+}
+
+
+//File I/O Example//
+char program_one(void) {
+    FILE *input;
+    input = fopen("test.txt","r");
+    if (input == NULL) {
+        perror("fopen()");
+        return 0;
+    }
+
+    char c;
+    
+    while (!feof(input)) {
+        fscanf(input, "%c", &c);
+        if (!feof(input)) {
+            printf("%c",c);
+        }
+    }
+    return 1;
+}
+
+//File I/O Example 1//
+char program_two(void) {
+    FILE *input;
+    input = fopen("input.txt","r");
+    if (input == NULL) {
+        perror("fopen()");
+        return 0;
+    }
+    
+    char c;
+    
+    while (!feof(input)) {
+        fscanf(input, "%c", &c);
+        if (!feof(input)) {
+            printf("%c %d\n", c, (int)ftell(input));
+        }
+    }
+    return 1;   
+}
+
+//File I/O Example 2//
+char program_three(void) {
+    FILE *input;
+    input = fopen("input.txt","r");
+    if (input == NULL) {
+        perror("fopen()");
+        return 0;
+    }
+    
+    FILE *output;
+    output = fopen("output.txt","w");
+    if (output == NULL) {
+        perror("fopen()");
+        return 0;
+    }
+    
+    char c;
+    unsigned int space_count = 0;
+    
+    while (!feof(input)) {
+        fscanf(input, "%c", &c);
+        if (c == ' ') {
+            space_count++;
+        }
+        if (!feof(input)) {
+            fprintf(output, "%c", c);
+        }
+    }
+    if (space_count != 1) {
+        printf("%d spaces\n", space_count);
+    }
+    else {
+        printf("%d space\n", space_count);
+    }
+    
+    return 1;   
+}
+
+//File I/O Example 3//
+char program_four(void) {
+    FILE *input;
+    input = fopen("input.txt","r");
+    if (input == NULL) {
+        perror("fopen()");
+        return -1;
+    }
+    
+    unsigned int i = 0;
+    
+    char string[3];
+    
+    unsigned int count = 0;
+    
+    
+    while (!feof(input)) {
+        for (i = 0; i < 2; i++) {
+            string[i] = string[i+1];
+        }
+        fscanf(input, "%c", &string[2]);
+        if (feof(input)) {
+            break;
+        }
+        count = isThe(string);
+    }
+    
+    printf("the x %d", count);
+    return 1;
+}
+int isThe(char *string) {
+    static unsigned int count = 0;
+    if ((string[0] == 't') && (string[1] == 'h') && (string[2] == 'e')) {
+        count++;
+    }
+    return count;
+}
+
+
+//Example (pointers)
+char program_five(void) {
+    unsigned int x = 133;
+    unsigned int y = 4256;
+    
+    printf("%d", zeroLarger(&x,&y));
+    
+    return 1;
+}
+unsigned int zeroLarger(unsigned int *a, unsigned int *b) {
+    unsigned int rtn = 0;
+    
+    if (*a > *b){
+        rtn = *a;
+        *a = 0;
+    }
+    else {
+        rtn = *b;
+        *b = 0;
+    }
+    return rtn;
+}
+
+
+//Better Example (pointers)
+char program_six(void) {
+    int x = 133;
+    int y = 4256;
+    
+    printf("x = %d\n", x);
+    printf("y = %d\n", y);
+    
+    swap(&x,&y);
+    
+    printf("x = %d\n", x);
+    printf("y = %d\n", y);
+    
+    return 1;
+}
+void swap(int *a, int *b) {
+    int tmp = *a;
+    *a = *b;
+    *b = tmp;
+    
+    return;
+}
+
+
+//Command Line Arguments Example
+char program_seven(FILE *input) {
+    FILE *output;
+    output = fopen("output.txt","w");
+    if (output == NULL) {
+        perror("fopen()");
+        printf("program_seven");
+        return 0;
+    }
+    
+    char string[100];
+    
+    for (int i = 0; i < 10; i++) {
+        fscanf(input,"%s", &string[0]);
+        printf("%s\n", string);
+    }
+    
+    return 1;
+}
+
+
+//2D Array Example
+char program_eight(void) {
+    FILE *input;
+    input = fopen("input.txt","r");
+    if (input == NULL) {
+        perror("fopen()");
+        return -1;
+    }
+    
+    FILE *output;
+    output = fopen("output.txt","w");
+    if (output == NULL) {
+        perror("fopen()");
+        return 0;
+    }
+    
+    float string[5][5];
+    float max = 0;
+    
+    for (int c = 0; c < 5; c++) {
+        for(int r = 0; r < 4; r++) {
+            fscanf(input,"%f, ", &string[c][r]);
+        }
+        fscanf(input,"%f\n", &string[c][4]);
+    }
+    
+    for (int c = 0; c < 5; c++) {
+        for(int r = 0; r < 5; r++) {
+            if (string[c][r] > max) {
+                max = string[c][r];
+            }
+        }
+    }
+    
+    for (int c = 0; c < 5; c++) {
+        for(int r = 0; r < 4; r++) {
+            printf("%f ", string[c][r]);
+        }
+        printf("%f\n", string[c][4]);
+    }
+    printf("%f\n", max);
+    for (int c = 0; c < 5; c++) {
+        for(int r = 0; r < 4; r++) {
+            fprintf(output, "%f ", string[c][r]);
+        }
+        fprintf(output, "%f\n", string[c][4]);
+    }
+    fprintf(output, "%f\n", max);
+    
+    return 1;
+}
