@@ -1,0 +1,1 @@
+cd ${current.project.path} && gcc -Wall -O0 -g *.c -lm && ./a.out | head -n 100
